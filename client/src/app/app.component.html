@@ -1,0 +1,18 @@
+<div class="navbar navbar-inverse">
+  <div class="container">
+    <div id="navbar-main">
+      <ul class="nav navbar-nav">
+        <li *ngIf="!auth.isLoggedIn()"><a routerLink="/">VideoGramm</a></li>
+        <li *ngIf="auth.isLoggedIn()"><a routerLink="/profile">{{ auth.getUserDetails()?.name }}</a></li>
+        <li *ngIf="auth.isLoggedIn()"><a routerLink="/files"> Uploads</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li *ngIf="!auth.isLoggedIn()"><a routerLink="/login">Login</a></li>
+        <li *ngIf="auth.isLoggedIn()"><a (click)="auth.logout()">Logout</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

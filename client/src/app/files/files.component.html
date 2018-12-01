@@ -1,0 +1,129 @@
+<article class="container-fluid upload_wrapper">
+  <div class="row">
+      <div class="col-md-4">
+          <form>
+              <div class="form-group">
+                  <label for="single">Selecione um arquivo</label>
+                  <input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />
+              </div>
+          </form>
+      </div>
+      <div class="col-md-8">
+          Quantidade de Arquivo(s): {{ uploader?.queue?.length }}
+
+          <table class="table">
+              <thead>
+              <tr>
+                  <th width="50%">Nome</th>
+                  <th>Tamanho</th>
+                  <th>Progresso</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of uploader.queue">
+                  <td><strong>{{ item.file.name }}</strong></td>
+                  <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+                  <td>
+                      <div class="progress" style="margin-bottom: 0;">
+                          <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                      </div>
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i> ok </span>
+                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                  </td>
+                  <td nowrap>
+                      <button type="button" class="btn btn-success btn-xs"
+                              (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                          <span class="glyphicon glyphicon-upload"></span> Upload
+                      </button>
+                      <button type="button" class="btn btn-warning btn-xs"
+                              (click)="item.cancel()" [disabled]="!item.isUploading">
+                          <span class="glyphicon glyphicon-ban-circle"></span> Cancelar
+                      </button>
+                      <button type="button" class="btn btn-danger btn-xs"
+                              (click)="item.remove()">
+                          <span class="glyphicon glyphicon-trash"></span> Remover
+                      </button>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
+
+          <div>
+              <div>
+                  Progresso de Upload(s)
+                  <div class="progress">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                  </div>
+              </div>
+              <button type="button" class="btn btn-success btn-s"
+                      (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                  <span class="glyphicon glyphicon-upload"></span> Upload all
+              </button>
+              <button type="button" class="btn btn-warning btn-s"
+                      (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+              </button>
+              <button type="button" class="btn btn-danger btn-s"
+                      (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                  <span class="glyphicon glyphicon-trash"></span> Remove all
+              </button>
+          </div>
+      </div>
+  </div>
+</article>
+<br>
+
+<article class="container-fluid table_wrapper">
+  <div class="table_wrapper_header">
+    <h2>Lista de arquivos (Atualize a página)</h2>
+  </div>
+  <table class="files table">
+    <thead>
+      <tr>
+        <th> ID </th>
+        <th> Nome </th>
+        <th> Caminho </th>
+        <th> Deletar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of files">
+        <td>{{file.fileSeq}}</td>
+        <td>
+        <a>
+            {{file.originalname}}
+          </a>
+        </td>
+        <td>
+          <source src="" type="">
+            {{file.path}}
+          </td>
+          <td>
+            <button class="delete btn btn-xs btn-danger" title="delete file" (click)="delete(file)">X</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</article>
+
+<!-- 
+<div class="col-sm-9">
+    <h4>
+      <small>Videos</small>
+    </h4>
+    <hr>
+    <hr width="50%" align="left">
+        <div  *ngFor="let file of files" class="card card-body mb-3" >
+          <video width="400" height="240" controls>
+            <source src="video/{{file.originalname}}" type="video/mp4">
+          </video>
+          <hr width="50%" align="left">
+        </div>
+</div>
+-->
+
